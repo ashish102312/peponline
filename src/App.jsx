@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react"
+import AuthForm from "./AuthForm"
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [userEmail, setUserEmail] = useState('')
   // Load tasks from localStorage on initial render
   const [todos, setTodos] = useState(() => {
     const savedTodos = localStorage.getItem("permanent-tasks")
@@ -69,9 +72,26 @@ function App() {
     new Date(b).getTime() - new Date(a).getTime()
   )
 
+  if (!isAuthenticated) {
+    return <AuthForm onLogin={(email) => { setIsAuthenticated(true); setUserEmail(email); }} />
+  }
+
   return (
     <div className="min-h-screen flex flex-col items-center bg-[#0f172a] bg-gradient-to-br from-[#0f172a] via-[#1e1b4b] to-[#0f172a] p-6 font-sans text-slate-50 overflow-y-auto">
       <div className="w-full max-w-2xl mt-10 md:mt-20 p-8 bg-white/5 backdrop-blur-3xl border border-white/10 rounded-[3rem] shadow-2xl animate-in fade-in zoom-in duration-700">
+        
+        {/* Header Section */}
+        <div className="flex justify-between items-center mb-8">
+          <div className="text-sm font-medium text-slate-400 bg-slate-800/50 px-4 py-2 rounded-full border border-white/5">
+            Logged in as <span className="text-violet-400">{userEmail}</span>
+          </div>
+          <button 
+            onClick={() => setIsAuthenticated(false)}
+            className="text-sm font-bold text-red-500/80 hover:text-red-400 px-4 py-2 bg-red-500/10 hover:bg-red-500/20 rounded-full transition-all"
+          >
+            Sign Out
+          </button>
+        </div>
         <div className="flex flex-col items-center mb-12 text-center">
           <h1 className="text-6xl font-black bg-gradient-to-r from-violet-400 via-fuchsia-400 to-pink-400 bg-clip-text text-transparent tracking-tight leading-tight">
             ashish102312's Tasks
